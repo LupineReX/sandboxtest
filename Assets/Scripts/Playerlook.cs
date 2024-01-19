@@ -4,17 +4,43 @@ using UnityEngine;
 
 public class Playerlook : MonoBehaviour
 {
-   [SerializeField] private float sensX;
-   [SerializeField] private float sensY;
+   [SerializeField] private float sensX = 2;
+   [SerializeField] private float sensY = 2;
 
    Camera cam;
 
    float mouseX;
-   float mousey;
+   float mouseY;
 
    float mutiplier = 0.01f;
 
    float xRotation;
    float yRotation;
+   
+   private void Start()
+   {
+        cam = GetComponentInChildren<Camera>();
+
+        Cursor.lockState = CursorLockMode.Locked;
+   }
+
+   private void Update()
+   {
+      MyInput();
+
+      cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+      transform.rotation = Quaternion.Euler(0,yRotation, 0);
+   }
+
+   void MyInput()
+   {
+        mouseX = Input.GetAxisRaw("Mouse X"); 
+        mouseY = Input.GetAxisRaw("Mouse Y");
+
+        yRotation += mouseX * sensX * mutiplier;
+        xRotation -= mouseY * sensY * mutiplier;
+
+        xRotation  = Mathf.Clamp(xRotation, -90f , 90f);
+   }
 
 }
