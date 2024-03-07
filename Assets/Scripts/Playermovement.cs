@@ -4,13 +4,26 @@ using UnityEngine;
 
 public class Playermovement : MonoBehaviour
 {
+
+   float playerHeight = 2f;
    [Header("Movement")]
    public float moveSpeed = 6f;
    float movementMultiplier = 10f;
-   float rbDrag = 6f;
+   [SerializeField] float airMultiplier = 0.4f;
+   [Header("Jumping")]
+   public float jumpForce = 5f;
+
+   [Header("keybinds")]
+   [SerializeField] KeyCode jumpKey = KeyCode.Space;
+   
+   [Header("Drag")]
+   float groundDrag = 6f;
+   float airDrag = 2f;
 
    float horziontalMovement;
    float verticalMovement;
+
+   bool isGrounded;
 
    Vector3 moveDirection;
 
@@ -24,8 +37,18 @@ public class Playermovement : MonoBehaviour
 
    private void Update()
    {
+       isGrounded = Physics.Raycast(transform.position,Vector3.down, playerHeight /2 + 0.1f);
        MyInput();
        ControlDrag();
+       if (Input.GetKeyDown(jumpKey) && isGrounded)
+       {
+            Jump();
+       }
+   }
+
+   void Jump()
+   {
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
    }
 
    void MyInput()
@@ -38,7 +61,14 @@ public class Playermovement : MonoBehaviour
 
    void ControlDrag()
    {
-      rb.drag = rbDrag;
+      if (isGrounded)
+      {
+         rb.drag = groundDrag;
+      }
+      else
+      {
+        rb.drag = airDrag;
+      }
    }
 
    private void FixedUpdate()
@@ -48,7 +78,15 @@ public class Playermovement : MonoBehaviour
 
    void MovePlayer()
    {
+      if (isGrounded)
+      {
         rb.AddForce(moveDirection.normalized * moveSpeed * movementMultiplier, ForceMode.Acceleration);
+      }
+      else if (!isGrounded)
+      {
+        rb.AddForce(moveDirection.normalized * moveSpeed * movementMultiplier*airMultiplier, ForceMode.Acceleration);
+
+      }
    }
 
 }
