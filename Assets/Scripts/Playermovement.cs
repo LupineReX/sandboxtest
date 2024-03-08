@@ -17,7 +17,11 @@ public class Playermovement : MonoBehaviour
    [SerializeField] float sprintSpeed = 6f;
    [SerializeField] float acceleration = 10f;
 
-
+   [Header("Crouching")]
+   public float crouchSpeed;
+   public float crouchYScale;
+   private float startYScale;
+   bool isCrouched;
    [SerializeField] float airMultiplier = 0.4f;
    [Header("Jumping")]
    public float jumpForce = 5f;
@@ -25,7 +29,7 @@ public class Playermovement : MonoBehaviour
    [Header("keybinds")]
    [SerializeField] KeyCode jumpKey = KeyCode.Space;
    [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
-
+   [SerializeField] KeyCode crouchKey = KeyCode.C;
    [Header("Drag")]
    [SerializeField] float groundDrag = 6f;
    [SerializeField] float airDrag = 2f;
@@ -65,6 +69,8 @@ public class Playermovement : MonoBehaviour
    {
        rb = GetComponent<Rigidbody>();
        rb.freezeRotation = true;
+
+       startYScale = transform.localScale.y;
    }
 
    private void Update()
@@ -93,6 +99,21 @@ public class Playermovement : MonoBehaviour
         verticalMovement = Input.GetAxisRaw("Vertical");
 
         moveDirection = orientation.forward * verticalMovement + orientation.right * horziontalMovement;
+        if (Input.GetKeyDown(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            rb.AddForce(Vector3.down*5f, ForceMode.Impulse);
+            isCrouched = true;
+        }
+        if (Input.GetKeyUp(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            isCrouched = false;
+        }
+        if (isCrouched)
+        {
+            moveSpeed = crouchSpeed;
+        }
    }
    void ControlSpeed()
    {
@@ -104,6 +125,7 @@ public class Playermovement : MonoBehaviour
         {
             moveSpeed = Mathf.Lerp(moveSpeed, walkSpeed, acceleration * Time.deltaTime);
         }
+        
    }
    void ControlDrag()
    {
