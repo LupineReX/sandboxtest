@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Playerlook : MonoBehaviour
-{
+{  
+   [Header("References")]
+   [SerializeField] WallRunning wallRun;
    [SerializeField] private float sensX = 2;
    [SerializeField] private float sensY = 2;
 
@@ -28,7 +30,7 @@ public class Playerlook : MonoBehaviour
    {
       MyInput();
 
-      cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+      cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, wallRun.tilt);
       orientation.transform.rotation = Quaternion.Euler(0,yRotation, 0);
    }
 

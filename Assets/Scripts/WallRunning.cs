@@ -76,6 +76,10 @@ public class WallRunning : MonoBehaviour
         rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
 
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, wallRunfov, wallRunfovTime * Time.deltaTime);
+        if (wallLeft)
+            tilt = Mathf.Lerp(tilt, -camTilt, camTiltTime * Time.deltaTime);
+        else if (wallRight)
+            tilt = Mathf.Lerp(tilt, camTilt, camTiltTime * Time.deltaTime);
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -97,6 +101,7 @@ public class WallRunning : MonoBehaviour
     {
         rb.useGravity = true;
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fov, wallRunfovTime * Time.deltaTime);
+        tilt = Mathf.Lerp(tilt, 0 , camTiltTime * Time.deltaTime);
 
     }
 }
