@@ -8,6 +8,7 @@ public class WallRunning : MonoBehaviour
     [SerializeField] Transform orientation;
 
     [Header("Detection")]
+    [SerializeField] LayerMask walls;
     [SerializeField] private float wallDistance = .5f;
     [SerializeField] private float minimumJumpHeight = 1.5f;
 
@@ -45,8 +46,8 @@ public class WallRunning : MonoBehaviour
     }
     void CheckWall()
     {
-        wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit ,wallDistance);
-        wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit ,wallDistance);
+        wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit ,wallDistance, walls);
+        wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit ,wallDistance, walls);
 
     }
     private void Update()
@@ -67,6 +68,10 @@ public class WallRunning : MonoBehaviour
             {
                 StopWallRun();
             }
+        }
+        else
+        {
+            StopWallRun();
         }
     }
     void StartWallRun()

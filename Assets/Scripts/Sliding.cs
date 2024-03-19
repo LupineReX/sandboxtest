@@ -14,6 +14,7 @@ public class Sliding : MonoBehaviour
    public float maxSlideTime;
    public float slideForce;
    private float slideTimer;
+   public float maxSlideForce;
    
    public float slideYScale;
    private float startYScale;
@@ -25,7 +26,7 @@ public class Sliding : MonoBehaviour
 
    private bool sliding;
 
-   private void start()
+   private void Start()
    {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<Playermovement>();
@@ -66,15 +67,35 @@ public class Sliding : MonoBehaviour
    }
    private void SlidingMovement()
    {
-          Vector3 inputDirection = orientation.forward * verticalInput + orientation.right *horziontalInput;
+     // Calculate input direction based on player orientation
+     Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horziontalInput;
 
-          rb.AddForce(inputDirection.normalized * slideForce, ForceMode.Force); 
+     // Add force to the player in the input direction
+     rb.AddForce(inputDirection.normalized * slideForce, ForceMode.Force);
 
-          slideTimer -= Time.deltaTime;
+     // Check if the player is on a slope
+     if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1.0f))
+     {
+          // Calculate the angle of the slope
+          float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
 
-          if (slideTimer <= 0)
-                StopSlide();
-   }
+          // If the angle is greater than 45 degrees, increase the slide force
+          if (slopeAngle > 45f)
+          {
+               // Gradually increase slideForce based on slope angle
+               slideForce += slopeAngle * Time.deltaTime;
+
+               // Cap the maximum slide force to prevent excessive acceleration
+               slideForce = Mathf.Min(slideForce, maxSlideForce);
+          }
+     }
+
+     slideTimer -= Time.deltaTime;
+
+     if (slideTimer <= 0)
+          StopSlide();
+     }
+   
 
    private void StopSlide()
    {
