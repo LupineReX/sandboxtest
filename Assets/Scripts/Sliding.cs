@@ -11,7 +11,7 @@ public class Sliding : MonoBehaviour
    private Playermovement pm;
 
    [Header("sliding")]
-   public float maxSlidetime;
+   public float maxSlideTime;
    public float slideForce;
    private float slideTimer;
    
@@ -19,7 +19,7 @@ public class Sliding : MonoBehaviour
    private float startYScale;
 
    [Header("Input")]
-   public KeyCode slideKey = KeyCode.C;
+   public KeyCode slideKey = KeyCode.V;
    private float horziontalInput;
    private float verticalInput;
 
@@ -50,7 +50,10 @@ public class Sliding : MonoBehaviour
    private void FixedUpdate()
    {
         if (sliding)
-             SlidingMovement();
+        {
+            SlidingMovement();
+        }
+            
    }
    private void StartSlide()
    {
@@ -63,13 +66,14 @@ public class Sliding : MonoBehaviour
    }
    private void SlidingMovement()
    {
-          Vector3 inputDirection = orientation.foward * verticalInput + orientation.right *horziontalInput;
+          Vector3 inputDirection = orientation.forward * verticalInput + orientation.right *horziontalInput;
 
-          rb.AddForce(inputDirection.normalized * slideForce, ForceMode.Force);
+          rb.AddForce(inputDirection.normalized * slideForce, ForceMode.Force); 
+
           slideTimer -= Time.deltaTime;
 
           if (slideTimer <= 0)
-               StopSlide();
+                StopSlide();
    }
 
    private void StopSlide()
