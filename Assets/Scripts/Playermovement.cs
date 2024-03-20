@@ -1,4 +1,4 @@
-   using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +16,7 @@ public class Playermovement : MonoBehaviour
    [SerializeField] float walkSpeed = 4f;
    [SerializeField] float sprintSpeed = 6f;
    [SerializeField] float acceleration = 10f;
+
 
    [Header("Crouching")]
    public float crouchSpeed;
@@ -40,13 +41,14 @@ public class Playermovement : MonoBehaviour
    [Header("Ground Detection")]
    [SerializeField] Transform groundCheck;
    [SerializeField] LayerMask groundMask;
-   bool isGrounded;
+   public bool isGrounded;
    float groundDistance = 0.4f;
    Vector3 moveDirection;
    Vector3 slopeMoveDirection;
 
    Rigidbody rb;
    
+   public bool sliding;
    RaycastHit slopeHit;
    private bool OnSlope()
     {
