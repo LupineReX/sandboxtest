@@ -22,7 +22,7 @@ public class Climbing : MonoBehaviour
 
     public KeyCode jumpKey = KeyCode.Space;
     public int climbJumps;
-    private int climbJumpsLeft 
+    private int climbJumpsLeft;
     [Header("Detection")]
     public float detectionLength;
     public float sphereCastRadius;
