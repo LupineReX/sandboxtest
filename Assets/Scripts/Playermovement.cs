@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Playermovement : MonoBehaviour
 {
-
+   [Header("References")]
+   public Climbing climbingScript;
    float playerHeight = 2f;
-
+  
    [SerializeField] Transform orientation;
    [Header("Movement")]
    public float moveSpeed = 6f;
@@ -148,6 +149,7 @@ public class Playermovement : MonoBehaviour
 
    void MovePlayer()
    {
+        if (climbingScript.exitingWall) return;
         if (isGrounded && !OnSlope())
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * movementMultiplier, ForceMode.Acceleration);

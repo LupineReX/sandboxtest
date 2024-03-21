@@ -32,6 +32,10 @@ public class Climbing : MonoBehaviour
     private RaycastHit frontWallHit;
     private bool wallFront;
 
+    private Transform lastWall;
+    private Vector3 lastWallNormal;
+    public float minWallNormalAngleChange;
+
     private void Update()
     {
         WallCheck();
@@ -53,21 +57,30 @@ public class Climbing : MonoBehaviour
         {
             if (climbing) StopClimbing();
         }
+
+        if (wallFront && Input.GetKeyDown(jumpKey) && climbJumpsLeft> 0) ClimbJump();
     }
     private void WallCheck()
     {
         wallFront = Physics.SphereCast(transform.position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, whatIsWall);
         wallLookAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
 
-        if (pm.isGrounded)
+        bool newWall = frontWallHit.transform != lastWall || Mathf.Abs(Vector3.Angle(lastWallNormal, frontWallHit.normal)) > minWallNormalAngleChange;
+
+
+        if ((wallFront && newWall) || pm.isGrounded)
         {
             climbTimer = maxClimbTime;
+            climbJumpsLeft = climbJumps;
         }
     }
     
     private void StartClimbing()
     {
         climbing = true;
+
+        lastWall = frontWallHit.transform;
+        lastWallNormal = frontWallHit.normal; 
     }
 
     private void ClimbingMovement()
@@ -78,5 +91,14 @@ public class Climbing : MonoBehaviour
     private void StopClimbing()
     {
         climbing = false;
+    }
+    private void ClimbJump()
+    {
+        Vector3 forceToApply = transform.up *climbJumpUpForce + frontWallHit.normal * climbJumpBackForce;
+        
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(forceToApply, ForceMode.Impulse);
+
+        climbJumpsLeft--;
     }
 }
