@@ -2,23 +2,34 @@ using UnityEngine;
 using System.Collections;
 public class Gun : MonoBehaviour
 {
+    [SerializeField] private bool useScope = false;
+    [SerializeField] private Scoped scoped;
+
     [Header("Camera")]
-    public Camera fpsCam;
+    [SerializeField] CameraFOV cameraFOV;
+    [SerializeField] Camera fpsCam;
+    [SerializeField] GameObject weaponCam;
     [Header("Effects")]
-    public ParticleSystem muzzleFlash;
-    public GameObject Impacteffect;
+    [SerializeField] ParticleSystem muzzleFlash;
+    [SerializeField] GameObject Impacteffect;
+    [SerializeField] GameObject scopeOverlay;
+    [Header("Effects")]
+    [SerializeField] float fovSmoothTime = 10f;
+    [SerializeField] float scopeFOV = 15f;
+    [SerializeField] bool isScoped = false;
+    private float normalFOV;
     [Header("Ammo")]
-    public int maxAmmo = 10;
+    [SerializeField] int maxAmmo = 10;
     private int currentAmmo;
-    public float reloadTime = 1f;
+    [SerializeField] float reloadTime = 1f;
     private bool isReloading = false;
     [Header("Damage")]
-    public float damage = 10f;
-    public float range = 100f;
-    public float fireRate = 15f;
+    [SerializeField] float damage = 10f;
+    [SerializeField] float range = 100f;
+    [SerializeField] float fireRate = 15f;
     private float nextTimeToFire = 0f;
     [SerializeField] KeyCode reloadKey = KeyCode.R;
-    public Animator animator;
+    [SerializeField] Animator animator;
     // Update is called once per frame
     void Start()
     {
@@ -26,6 +37,7 @@ public class Gun : MonoBehaviour
     }
     void OnEnable()
     {
+        scoped.enabled = useScope;
         isReloading = false;
         animator.SetBool("Reloading", false);
     }
@@ -35,7 +47,7 @@ public class Gun : MonoBehaviour
             return;
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
         {
-            nextTimeToFire = Time.time + 1f/fireRate;
+            nextTimeToFire = Time.time + 1f / fireRate;
             Shoot();
         }
         if (currentAmmo <= 0)
@@ -48,8 +60,27 @@ public class Gun : MonoBehaviour
             StartCoroutine(Reload());
             return;
         }
-
-
+        /*
+        if (Input.GetButton("Fire2"))
+        {
+            animator.SetBool("Scoped", true);        
+        }
+        else
+            animator.SetBool("Scoped", false);
+        */
+    }
+    IEnumerator OnScope()
+    {
+        yield return new WaitForSeconds(.15f);
+        scopeOverlay.SetActive(true);
+        weaponCam.SetActive(false);
+        cameraFOV.SetFov(scopeFOV, fovSmoothTime);
+    }
+    void OnUnScoped()
+    {
+        scopeOverlay.SetActive(false);
+        weaponCam.SetActive(true);
+        cameraFOV.ResetFov();
     }
     void Shoot()
     {
