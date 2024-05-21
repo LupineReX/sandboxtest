@@ -30,6 +30,10 @@ public class Gun : MonoBehaviour
     private float nextTimeToFire = 0f;
     [SerializeField] KeyCode reloadKey = KeyCode.R;
     [SerializeField] Animator animator;
+
+
+
+    [SerializeField] private Recoil Recoil_Script;
     // Update is called once per frame
     void Start()
     {
@@ -86,6 +90,7 @@ public class Gun : MonoBehaviour
     {
         muzzleFlash.Play();
         currentAmmo--;
+        Recoil_Script.RecoilFire();
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit,range))
         {
