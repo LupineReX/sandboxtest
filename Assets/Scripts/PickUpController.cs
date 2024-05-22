@@ -5,17 +5,35 @@ using UnityEngine;
 public class PickUpController : MonoBehaviour
 {
     [Header("References")]
-    public Gun gunScript;
-    public Rigidbody rb;
-    public BoxCollider coll;
-    public Transform player, gunContainer, fpsCam;
+
+    [SerializeField] Gun gunScript;
+    [SerializeField] Rigidbody rb;
+    [SerializeField] BoxCollider coll;
+    [SerializeField] Transform player, gunContainer, fpsCam;
+
     [Header("Pickup Settings")]
-    public float pickUpRange;
-    public float dropForwardForce, dropUpwardForce;
+    [SerializeField] float pickUpRange;
+    [SerializeField] float dropForwardForce, dropUpwardForce;
 
-    public bool equipped;
-    public static bool slotFull;
+    [SerializeField] bool equipped;
+    [SerializeField] static bool slotFull;
 
+    private void Start()
+    {
+        if (!equipped)
+        {
+            gunScript.enabled = false;
+            rb.isKinematic = false;
+            coll.isTrigger = false;
+        }
+        if (equipped)
+        {
+            gunScript.enabled = true;
+            rb.isKinematic = true;
+            coll.isTrigger = true;
+            slotFull = true;
+        }
+    }
     private void Update()
     {
         Vector3 distanceToPlayer = player.position - transform.position;
@@ -28,6 +46,11 @@ public class PickUpController : MonoBehaviour
         equipped = true;
         slotFull = true;
 
+        transform.SetParent(gunContainer);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.Euler(Vector3.zero);
+        transform.localScale = Vector3.one;
+
         rb.isKinematic = true;
         coll.isTrigger = true;
 
@@ -38,9 +61,18 @@ public class PickUpController : MonoBehaviour
         equipped = false;
         slotFull = false;
 
+        transform.SetParent(null);
         rb.isKinematic = false;
         coll.isTrigger = false;
 
+        rb.velocity = player.GetComponent<Rigidbody>().velocity;
+
+        rb.AddForce(fpsCam.forward * dropForwardForce, ForceMode.Impulse);
+        rb.AddForce(fpsCam.up * dropUpwardForce, ForceMode.Impulse);
+
+        float random = Random.Range(-1f, 1f);
+
+        rb.AddTorque(new Vector3(random, random, random) * 10);
         gunScript.enabled = false;
     }
 }

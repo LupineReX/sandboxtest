@@ -360,6 +360,8 @@ GameObject:
   - component: {fileID: 78288236}
   - component: {fileID: 78288235}
   - component: {fileID: 78288234}
+  - component: {fileID: 78288239}
+  - component: {fileID: 78288238}
   m_Layer: 8
   m_Name: Pistol
   m_TagString: Untagged
@@ -376,12 +378,12 @@ Transform:
   m_GameObject: {fileID: 78288232}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.39260006, y: -0.334, z: 0.5585003}
+  m_LocalPosition: {x: 8.1426, y: 1.4699999, z: 22.074501}
   m_LocalScale: {x: 0.2147, y: 0.1978, z: 0.821}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1460419756}
-  m_Father: {fileID: 1139189411}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &78288234
 MonoBehaviour:
@@ -486,6 +488,55 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 78288232}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &78288238
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78288232}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 2
+  m_Constraints: 0
+  m_CollisionDetection: 3
+--- !u!114 &78288239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78288232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469377dc1c5094d3ab1f8760bdc58ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunScript: {fileID: 78288234}
+  rb: {fileID: 78288238}
+  coll: {fileID: 78288235}
+  player: {fileID: 616441859}
+  gunContainer: {fileID: 1139189411}
+  fpsCam: {fileID: 1958930943}
+  pickUpRange: 4
+  dropForwardForce: 7
+  dropUpwardForce: 15
+  equipped: 0
 --- !u!1 &83860291
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,6 +1731,8 @@ GameObject:
   - component: {fileID: 845587558}
   - component: {fileID: 845587557}
   - component: {fileID: 845587556}
+  - component: {fileID: 845587561}
+  - component: {fileID: 845587560}
   m_Layer: 8
   m_Name: Sniper
   m_TagString: Untagged
@@ -1807,6 +1860,55 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 845587554}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &845587560
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845587554}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 2
+  m_Constraints: 0
+  m_CollisionDetection: 3
+--- !u!114 &845587561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845587554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469377dc1c5094d3ab1f8760bdc58ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunScript: {fileID: 845587556}
+  rb: {fileID: 845587560}
+  coll: {fileID: 845587557}
+  player: {fileID: 616441859}
+  gunContainer: {fileID: 1139189411}
+  fpsCam: {fileID: 1958930943}
+  pickUpRange: 4
+  dropForwardForce: 15
+  dropUpwardForce: 7
+  equipped: 1
 --- !u!1 &883153908
 GameObject:
   m_ObjectHideFlags: 0
@@ -2225,6 +2327,8 @@ GameObject:
   - component: {fileID: 1118053042}
   - component: {fileID: 1118053041}
   - component: {fileID: 1118053040}
+  - component: {fileID: 1118053045}
+  - component: {fileID: 1118053044}
   m_Layer: 8
   m_Name: rifle
   m_TagString: Untagged
@@ -2241,12 +2345,12 @@ Transform:
   m_GameObject: {fileID: 1118053038}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.39260006, y: -0.334, z: 0.5585003}
+  m_LocalPosition: {x: 8.1426, y: 1.4699999, z: 22.074501}
   m_LocalScale: {x: 0.2147, y: 0.1978, z: 0.821}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1326290868}
-  m_Father: {fileID: 1139189411}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1118053040
 MonoBehaviour:
@@ -2351,6 +2455,55 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118053038}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &1118053044
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118053038}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 2
+  m_Constraints: 0
+  m_CollisionDetection: 3
+--- !u!114 &1118053045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118053038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469377dc1c5094d3ab1f8760bdc58ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunScript: {fileID: 1118053040}
+  rb: {fileID: 1118053044}
+  coll: {fileID: 1118053041}
+  player: {fileID: 616441859}
+  gunContainer: {fileID: 1139189411}
+  fpsCam: {fileID: 1958930943}
+  pickUpRange: 4
+  dropForwardForce: 15
+  dropUpwardForce: 7
+  equipped: 0
 --- !u!1001 &1125562502
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2500,8 +2653,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1118053039}
-  - {fileID: 78288233}
   - {fileID: 845587555}
   m_Father: {fileID: 1269246747}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4484,6 +4635,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 410087041}
+  - {fileID: 1118053039}
+  - {fileID: 78288233}
   - {fileID: 1269246747}
   - {fileID: 832575519}
   - {fileID: 1106625978}
