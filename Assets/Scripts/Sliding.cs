@@ -4,104 +4,104 @@ using UnityEngine;
 
 public class Sliding : MonoBehaviour
 {
-   [Header("References")]
-   public Transform orientation;
-   public Transform playerObj;
-   private Rigidbody rb;
-   private Playermovement pm;
+    [Header("References")]
+    public Transform orientation;
+    public Transform playerObj;
+    private Rigidbody rb;
+    private Playermovement pm;
 
-   [Header("sliding")]
-   public float maxSlideTime;
-   public float slideForce;
-   private float slideTimer;
-   public float maxSlideForce;
-   
-   public float slideYScale;
-   private float startYScale;
+    [Header("Sliding")]
+    public float maxSlideTime;
+    public float slideForce;
+    private float slideTimer;
+    public float maxSlideForce;
 
-   [Header("Input")]
-   public KeyCode slideKey = KeyCode.V;
-   private float horziontalInput;
-   private float verticalInput;
+    public float slideYScale;
+    private float startYScale;
 
-   private bool sliding;
+    [Header("Input")]
+    public KeyCode slideKey = KeyCode.V;
+    private float horizontalInput;
+    private float verticalInput;
 
-   private void Start()
-   {
+    private bool sliding;
+
+    private void Start()
+    {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<Playermovement>();
 
         startYScale = playerObj.localScale.y;
-   }
+    }
 
-   private void Update()
-   {
-        horziontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input .GetAxisRaw("Vertical");
+    private void Update()
+    {
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
 
-        if(Input.GetKeyDown(slideKey) && (horziontalInput != 0 || verticalInput != 0))
+        // Check if the player is sprinting in addition to sliding input
+        if (Input.GetKeyDown(slideKey) && pm.isSprinting && (horizontalInput != 0 || verticalInput != 0))
         {
             StartSlide();
         }
-        if(Input.GetKeyUp(slideKey) && sliding)
+        if (Input.GetKeyUp(slideKey) && sliding)
         {
             StopSlide();
         }
-   }
-   private void FixedUpdate()
-   {
+    }
+
+    private void FixedUpdate()
+    {
         if (sliding)
         {
             SlidingMovement();
         }
-            
-   }
-   private void StartSlide()
-   {
-        sliding = true; 
+    }
+
+    private void StartSlide()
+    {
+        sliding = true;
         playerObj.localScale = new Vector3(playerObj.localScale.x, slideYScale, playerObj.localScale.z);
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
 
-        slideTimer = maxSlideTime;        
-        
-   }
-   private void SlidingMovement()
-   {
-     // Calculate input direction based on player orientation
-     Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horziontalInput;
+        slideTimer = maxSlideTime;
+    }
 
-     // Add force to the player in the input direction
-     rb.AddForce(inputDirection.normalized * slideForce, ForceMode.Force);
+    private void SlidingMovement()
+    {
+        // Calculate input direction based on player orientation
+        Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-     // Check if the player is on a slope
-     if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1.0f))
-     {
-          // Calculate the angle of the slope
-          float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+        // Add force to the player in the input direction
+        rb.AddForce(inputDirection.normalized * slideForce, ForceMode.Force);
 
-          // If the angle is greater than 45 degrees, increase the slide force
-          if (slopeAngle > 45f)
-          {
-               // Gradually increase slideForce based on slope angle
-               slideForce += slopeAngle * Time.deltaTime;
+        // Check if the player is on a slope
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1.0f))
+        {
+            // Calculate the angle of the slope
+            float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
 
-               // Cap the maximum slide force to prevent excessive acceleration
-               slideForce = Mathf.Min(slideForce, maxSlideForce);
-          }
-     }
+            // If the angle is greater than 45 degrees, increase the slide force
+            if (slopeAngle > 45f)
+            {
+                // Gradually increase slideForce based on slope angle
+                slideForce += slopeAngle * Time.deltaTime;
 
-     slideTimer -= Time.deltaTime;
+                // Cap the maximum slide force to prevent excessive acceleration
+                slideForce = Mathf.Min(slideForce, maxSlideForce);
+            }
+        }
 
-     if (slideTimer <= 0)
-          StopSlide();
-     }
-   
+        slideTimer -= Time.deltaTime;
 
-   private void StopSlide()
-   {
-          sliding = false;
-          playerObj.localScale = new Vector3(playerObj.localScale.x, startYScale, playerObj.localScale.z);
+        if (slideTimer <= 0)
+            StopSlide();
+    }
 
-
-   }
+    private void StopSlide()
+    {
+        sliding = false;
+        playerObj.localScale = new Vector3(playerObj.localScale.x, startYScale, playerObj.localScale.z);
+    }
 }
+
