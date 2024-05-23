@@ -6,20 +6,10 @@ public class Recoil : MonoBehaviour
     private Vector3 currentRotation;
     private Vector3 targetRotation;
     [Header("Hipfire Recoil")]
-    [SerializeField] private float recoilX;
-    [SerializeField] private float recoilY;
-    [SerializeField] private float recoilZ;
+    [SerializeField] private Vector3 recoil;
     [Header("Recoil Settings")]
     [SerializeField] private float snappiness;
     [SerializeField] private float returnSpeed;
-
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -29,9 +19,13 @@ public class Recoil : MonoBehaviour
         transform.localRotation = Quaternion.Euler(currentRotation);
     }
 
+    public void RecoilFire(Vector3 recoil)
+    {
+        targetRotation += new Vector3(-recoil.y, Random.Range(-recoil.x, recoil.x), Random.Range(-recoil.z, recoil.z));
+    }
+
     public void RecoilFire()
     {
-        targetRotation += new Vector3(recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilX, recoilX));
-
+        targetRotation += new Vector3(-recoil.y, Random.Range(-recoil.x, recoil.x), Random.Range(-recoil.z, recoil.z));
     }
 }

@@ -17,6 +17,7 @@ public class Gun : MonoBehaviour
     [SerializeField] float fovSmoothTime = 10f;
     [SerializeField] float scopeFOV = 15f;
     [SerializeField] bool isScoped = false;
+    [SerializeField] Vector3 recoil;
     private float normalFOV;
     [Header("Ammo")]
     [SerializeField] int maxAmmo = 10;
@@ -90,7 +91,7 @@ public class Gun : MonoBehaviour
     {
         muzzleFlash.Play();
         currentAmmo--;
-        Recoil_Script.RecoilFire();
+        Recoil_Script.RecoilFire(recoil);
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit,range))
         {

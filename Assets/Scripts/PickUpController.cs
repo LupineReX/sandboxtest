@@ -16,7 +16,6 @@ public class PickUpController : MonoBehaviour
     [SerializeField] float dropForwardForce, dropUpwardForce;
 
     [SerializeField] bool equipped;
-    [SerializeField] static bool slotFull;
 
     private void Start()
     {
@@ -31,20 +30,18 @@ public class PickUpController : MonoBehaviour
             gunScript.enabled = true;
             rb.isKinematic = true;
             coll.isTrigger = true;
-            slotFull = true;
         }
     }
     private void Update()
     {
         Vector3 distanceToPlayer = player.position - transform.position;
-        if (!equipped && distanceToPlayer.magnitude <= pickUpRange && Input.GetKeyDown(KeyCode.E) && !slotFull) PickUp();
+        if (!equipped && distanceToPlayer.magnitude <= pickUpRange && Input.GetKeyDown(KeyCode.E)) PickUp();
 
         if (equipped && Input.GetKeyDown(KeyCode.F)) Drop();
     }
     private void PickUp()
     {
         equipped = true;
-        slotFull = true;
 
         transform.SetParent(gunContainer);
         transform.localPosition = Vector3.zero;
@@ -59,7 +56,6 @@ public class PickUpController : MonoBehaviour
     private void Drop()
     {
         equipped = false;
-        slotFull = false;
 
         transform.SetParent(null);
         rb.isKinematic = false;

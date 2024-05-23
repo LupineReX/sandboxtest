@@ -6,6 +6,7 @@ public class CameraFOV : MonoBehaviour
 {
     [SerializeField] float startFov;
     [SerializeField] Camera fpscam;
+    [SerializeField] Camera gunCam;
     private float fovSmoothTime = 10f;
 
     private float targetFov;
@@ -18,7 +19,9 @@ public class CameraFOV : MonoBehaviour
 
     void Update()
     {
-        fpscam.fieldOfView = Mathf.Lerp(fpscam.fieldOfView, targetFov + wallRunFovDelta, fovSmoothTime * Time.deltaTime);
+        float fov = Mathf.Lerp(fpscam.fieldOfView, targetFov + wallRunFovDelta, fovSmoothTime * Time.deltaTime);
+        fpscam.fieldOfView = fov;
+        gunCam.fieldOfView = fov;
     }
 
     public void SetFov(float newFov, float fovSmoothTime)
