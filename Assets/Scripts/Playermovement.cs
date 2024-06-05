@@ -51,6 +51,8 @@ public class Playermovement : MonoBehaviour
 
     public bool sliding;
     public bool freeze;
+    public bool activegrapple;
+    private bool enableMovementOnNextTouch;
     RaycastHit slopeHit;
     private bool OnSlope()
     {
@@ -95,13 +97,51 @@ public class Playermovement : MonoBehaviour
             rb.velocity = Vector3.zero;
         }
     }
-
+    public void ResetRestrictions()
+    {
+        activegrapple = false;
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (enableMovementOnNextTouch)
+        {
+            enableMovementOnNextTouch = false;
+            ResetRestrictions();
+            GetComponent<Grappling>().StopGrapple();
+        }
+    }
     void Jump()
     {
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
+    private Vector3 velocityToSet;
 
+    private void SetVelocity()
+    {
+        enableMovementOnNextTouch = true;
+        rb.velocity = velocityToSet;
+    }
+    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    {
+        float gravity = Physics.gravity.y;
+        float displacementY = endPoint.y - startPoint.y;
+        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity)
+            + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
+
+        return velocityXZ + velocityY;
+    }
+    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+    {
+        activegrapple = true;
+        rb.velocity = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+        Invoke(nameof(SetVelocity), 0.1f);
+
+        Invoke(nameof(ResetRestrictions), 3f);
+    }
     void MyInput()
     {
         horziontalMovement = Input.GetAxisRaw("Horizontal");
@@ -131,6 +171,7 @@ public class Playermovement : MonoBehaviour
     }
     void ControlSpeed()
     {
+        if (activegrapple) return;
         if (Input.GetKeyDown(sprintKey) && isGrounded)
         {
             isSprinting = true;
@@ -152,7 +193,7 @@ public class Playermovement : MonoBehaviour
     }
     void ControlDrag()
     {
-        if (isGrounded)
+        if (isGrounded && !activegrapple)
         {
             rb.drag = groundDrag;
         }
@@ -169,6 +210,7 @@ public class Playermovement : MonoBehaviour
 
     void MovePlayer()
     {
+        if (activegrapple) return;
         if (climbingScript.exitingWall) return;
         if (isGrounded && !OnSlope())
         {

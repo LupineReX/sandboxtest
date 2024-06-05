@@ -36,7 +36,6 @@ public class PickUpController : MonoBehaviour
     {
         Vector3 distanceToPlayer = player.position - transform.position;
         if (!equipped && distanceToPlayer.magnitude <= pickUpRange && Input.GetKeyDown(KeyCode.E)) PickUp();
-
         if (equipped && Input.GetKeyDown(KeyCode.F)) Drop();
     }
     private void PickUp()
